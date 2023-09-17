@@ -1,7 +1,25 @@
-FROM python:3.10-alpine
-COPY src/ /opt/arai
-COPY requirements.txt /tmp/requirements.txt
-RUN pip3 install -r /tmp/requirements.txt
-RUN rm /tmp/requirements.txt
-WORKDIR /opt/arai
+# BUILDER STAGE
+
+FROM python:3.11 AS BUILDER
+
+RUN pip install poetry
+
+COPY poetry.lock pyproject.toml ./
+
+RUN poetry export > ./requirements.txt
+
+# PRODUCTION STAGE
+
+FROM python:3.11-alpine AS PRODUCTION
+
+COPY --from=BUILDER ./requirements.txt ./requirements.txt
+
+RUN pip install -r requirements.txt
+
+RUN rm ./requirements.txt
+
+WORKDIR /src/
+
+COPY /src/ ./
+
 CMD ["python3", "app.py"]
