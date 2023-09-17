@@ -1,8 +1,9 @@
-from arai import create_app
 import json
+import logging
 
 import colouredlogs
-import logging
+
+from arai import create_app
 
 colouredlogs.install(level="DEBUG")
 
