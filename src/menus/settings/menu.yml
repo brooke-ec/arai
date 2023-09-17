@@ -1,0 +1,75 @@
+channel: 900822038367846491
+elements:
+  - attachment: ./pronouns.png
+    selectmany:
+      - emoji: 🔵
+        label: He/Him
+        role: 900829974347546626
+      - emoji: 🔴
+        label: She/Her
+        role: 900830132154011678
+      - emoji: 🟣
+        label: They/Them
+        role: 900830151024185344
+      - emoji: 🟢
+        label: It/Its
+        role: 900830200013656084
+      - emoji: 🟠
+        label: Other
+        role: 900830443245551666
+      - emoji: ⚪
+        label: Ask
+        role: 900830466230329405
+  
+  - attachment: ./colour.png
+    selectone:
+      - emoji: <:seafoam_square:899660228625313852>
+        label: Seafoam Green
+        role: 900829540195135488
+      - emoji: 🟩
+        label: Green
+        role: 900829606456733746
+      - emoji: 🟦
+        label: Blue
+        role: 900829627671511072
+      - emoji: 🟪
+        label: Purple
+        role: 900829644058665000
+      - emoji: <:magenta_square:899661446433083432>
+        label: Magenta
+        role: 900829664212303893
+      - emoji: 🟨
+        label: Yellow
+        role: 900829689243902012
+      - emoji: 🟧
+        label: Orange
+        role: 900829711553409085
+      - emoji: 🟥
+        label: Red
+        role: 900829732512362497
+      - emoji: ⬜
+        label: Default Colour
+        role: null
+
+  - attachment: ./misc.png
+  - content: "**Family Game Night Notifications?**"
+    radio:
+      - emoji: 🔔
+        label: Enable
+        role: 900837468943810671
+        style: green
+      - emoji: 🔕
+        label: Disable
+        role: null
+        style: red
+  
+  - content: "**Spam Channel?**"
+    radio:
+      - emoji: <:universal_check:768906325010022411>
+        label: Enable
+        role: 900837182464483398
+        style: green
+      - emoji: <:cross_red:768507522335506473>
+        label: Disable
+        role: null
+        style: red
