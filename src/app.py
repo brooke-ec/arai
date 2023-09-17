@@ -1,4 +1,3 @@
-import json
 import logging
 
 import colouredlogs
@@ -14,5 +13,5 @@ logging.getLogger("discord.client").setLevel("WARN")
 logging.getLogger("discord.gateway").setLevel("WARN")
 logging.getLogger("discord.voice_client").setLevel("WARN")
 
-app = create_app(json.load(open(CONFIG_PATH, "r", encoding="utf-8")))
+app = create_app()
 app.run()
