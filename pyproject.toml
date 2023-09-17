@@ -10,6 +10,8 @@ python = "^3.10"
 "discord.py" = "^2.0.1"
 aiomysql = "^0.1.1"
 colouredlogs = "^10.0.1"
+pyyaml = "^6.0.1"
+pynacl = "^1.5.0"
 
 
 [tool.poetry.group.dev.dependencies]
