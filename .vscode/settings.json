@@ -1,3 +1,6 @@
 {
-  "black-formatter.args": ["--line-length", "200"]
+  "python.analysis.typeCheckingMode": "basic",
+  "terminal.integrated.env.windows": {
+    "PYTHONPATH": "${workspaceFolder}/packages/bot;${env:PYTHONPATH}"
+  }
 }

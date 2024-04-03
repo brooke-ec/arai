@@ -1,0 +1,8 @@
+{
+  "name": "@arai/monorepo",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel -r dev",
+    "build": "pnpm --parallel -r build"
+  }
+}
