@@ -1,6 +1,0 @@
-{
-	"python.analysis.typeCheckingMode": "off",
-	"terminal.integrated.env.windows": {
-		"PYTHONPATH": "${workspaceFolder}/packages/bot;${env:PYTHONPATH}"
-	}
-}
