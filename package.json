@@ -1,8 +1,9 @@
 {
-  "name": "@arai/monorepo",
-  "private": true,
-  "scripts": {
-    "dev": "pnpm --parallel -r dev",
-    "build": "pnpm --parallel -r build"
-  }
+	"name": "@arai/monorepo",
+	"private": true,
+	"scripts": {
+		"dev:web": "pnpm --filter web -r dev",
+		"dev:bot": "pnpm --filter bot -r dev",
+		"build": "pnpm --parallel -r build"
+	}
 }

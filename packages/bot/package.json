@@ -1,0 +1,20 @@
+{
+	"name": "@arai/bot",
+	"type": "module",
+	"main": "src/index.ts",
+	"scripts": {
+		"dev": "nodemon -e js,ts --loader tsm .",
+		"start": "tsm ."
+	},
+	"dependencies": {
+		"discord.js": "^14.15.2",
+		"dotenv": "^16.4.5",
+		"jellycommands": "1.0.0-next.43",
+		"typescript": "^5.4.5"
+	},
+	"devDependencies": {
+		"@types/node": "^20.12.11",
+		"nodemon": "^3.1.0",
+		"tsm": "^2.3.0"
+	}
+}
