@@ -3,6 +3,7 @@
 	"type": "module",
 	"main": "src/index.ts",
 	"scripts": {
+		"typegen": "pocketbase-typegen --env -o src/lib/pocketbase.d.ts",
 		"dev": "nodemon -e js,ts --loader tsm .",
 		"start": "tsm ."
 	},
@@ -10,11 +11,13 @@
 		"discord.js": "^14.15.2",
 		"dotenv": "^16.4.5",
 		"jellycommands": "1.0.0-next.43",
+		"pocketbase": "^0.21.2",
 		"typescript": "^5.4.5"
 	},
 	"devDependencies": {
 		"@types/node": "^20.12.11",
 		"nodemon": "^3.1.0",
+		"pocketbase-typegen": "^1.2.1",
 		"tsm": "^2.3.0"
 	}
 }
