@@ -1,0 +1,31 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index b9dd6322710dca6451a0b6e0cd4fd5eaf28e258c..6b999203ef8b6c2de2722615693924d3ca4da5a7 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -111,7 +111,7 @@ var resolveCommands = /* @__PURE__ */ __name(async (client, items) => {
+   const commands = /* @__PURE__ */ new Set();
+   await read(items, (command2) => {
+     if (!(command2 instanceof BaseCommand))
+-      throw new Error(`Found invalid item "${command2}" in options.commands`);
++      return;
+     if (!command2.options.disabled) {
+       commands.add(command2);
+     }
+@@ -355,7 +355,7 @@ var registerEvents = /* @__PURE__ */ __name(async (client, items) => {
+   const events = /* @__PURE__ */ new Set();
+   await read(items, (event2) => {
+     if (!(event2 instanceof Event))
+-      throw new Error(`Found invalid item "${event2}" in options.events`);
++      return;
+     if (!event2.options.disabled) {
+       events.add(event2);
+     }
+@@ -451,7 +451,7 @@ async function loadButtons(items) {
+   const buttons = /* @__PURE__ */ new Set();
+   await read(items, (button2) => {
+     if (!(button2 instanceof Button))
+-      throw new Error(`Found invalid item "${button2}" in options.buttons`);
++      return;
+     if (!button2.options.disabled) {
+       buttons.add(button2);
+     }

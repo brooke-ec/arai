@@ -5,5 +5,10 @@
 		"dev:web": "pnpm --filter web -r dev",
 		"dev:bot": "pnpm --filter bot -r dev",
 		"build": "pnpm --parallel -r build"
+	},
+	"pnpm": {
+		"patchedDependencies": {
+			"jellycommands@1.0.0-next.43": "patches/jellycommands@1.0.0-next.43.patch"
+		}
 	}
 }
