@@ -1,9 +1,9 @@
-import { MemberRecord } from "./pocketbase.d";
+import { MemberResponse } from "./pocketbase.d";
 import { pb } from "./pocketbase";
 import { User } from "discord.js";
 import { ofetch } from "ofetch";
 
-export async function syncMember(user: User): Promise<MemberRecord> {
+export async function syncMember(user: User): Promise<MemberResponse> {
 	const old = (await pb.collection("member").getList(1, 1, { filter: `snowflake="${user.id}"` })).items[0];
 
 	const payload = new FormData();

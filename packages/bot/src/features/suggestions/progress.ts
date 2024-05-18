@@ -22,7 +22,7 @@ const END_EMOJIS = [
 	"<:end_4:1225834803103006801>",
 ];
 
-export function generateProgress(progress: number, length: number) {
+export function createProgress(progress: number, length: number) {
 	const substeps = MIDDLE_EMOJIS.length;
 
 	// Get the components of the progress bar
