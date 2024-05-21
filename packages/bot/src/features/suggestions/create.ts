@@ -1,36 +1,31 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import { syncMember } from "../../lib/utils";
+import { pb } from "../../lib/pocketbase";
+import { CHECK } from "../../lib/emoji";
 import { command } from "jellycommands";
 import { createEmbed } from "./util";
-import { syncMember } from "../../lib/utils";
-import { CHECK } from "../../lib/emoji";
 
 export default command({
 	name: "suggest",
 	description: "Create a new suggestion",
-	options: [
-		{ name: "content", type: "String", description: "The content of the suggestion.", required: true },
-	],
+	options: [{ name: "content", type: "String", description: "The content of the suggestion.", required: true }],
 
 	global: true,
 
 	run: async ({ interaction }) => {
-		const row = new ActionRowBuilder<ButtonBuilder>();
-
-		row.addComponents(
-			new ButtonBuilder().setCustomId("upvote").setEmoji("⬆️").setStyle(ButtonStyle.Secondary),
-		);
-
-		row.addComponents(
-			new ButtonBuilder().setCustomId("downvote").setEmoji("⬇️").setStyle(ButtonStyle.Secondary),
-		);
-
 		const content = interaction.options.getString("content", true);
 		const author = await syncMember(interaction.user);
 
-		interaction.channel?.send({
+		const row = new ActionRowBuilder<ButtonBuilder>()
+			.addComponents(new ButtonBuilder().setCustomId("upvote").setEmoji("⬆️").setStyle(ButtonStyle.Secondary))
+			.addComponents(new ButtonBuilder().setCustomId("downvote").setEmoji("⬇️").setStyle(ButtonStyle.Secondary));
+
+		const message = await interaction.channel?.send({
 			embeds: [createEmbed({ content }, author)],
 			components: [row],
 		});
+
+		await pb.collection("suggestion").create({ content, author: author.id, message: message!.id });
 
 		interaction.reply({ content: `${CHECK} Suggestion Created`, ephemeral: true });
 	},

@@ -3,10 +3,7 @@ import { createProgress } from "./progress";
 import { EmbedBuilder } from "discord.js";
 import { pb } from "../../lib/pocketbase";
 
-export function createEmbed(
-	suggestion: Omit<SuggestionRecord, "message" | "author">,
-	author: MemberResponse,
-) {
+export function createEmbed(suggestion: Omit<SuggestionRecord, "message" | "author">, author: MemberResponse) {
 	return new EmbedBuilder()
 		.setColor(0xa6a6df)
 		.setTitle(`Suggestion #${1}`)
