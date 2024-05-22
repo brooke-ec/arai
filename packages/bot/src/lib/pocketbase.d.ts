@@ -8,6 +8,8 @@ import type { RecordService } from 'pocketbase'
 export enum Collections {
 	Member = "member",
 	Suggestion = "suggestion",
+	SuggestionInfo = "suggestionInfo",
+	SuggestionVote = "suggestionVote",
 	User = "user",
 }
 
@@ -38,13 +40,31 @@ export type AuthSystemFields<T = never> = {
 export type MemberRecord = {
 	avatar: string
 	name: string
-	snowflake?: string
+	snowflake: string
 }
 
 export type SuggestionRecord = {
-	author?: RecordIdString
-	content?: string
+	author: RecordIdString
+	content: string
+	downvotes?: number
 	message: string
+	upvotes?: number
+}
+
+export type SuggestionInfoRecord = {
+	author: RecordIdString
+	content: string
+	message: string
+}
+
+export enum SuggestionVoteTypeOptions {
+	"upvote" = "upvote",
+	"downvote" = "downvote",
+}
+export type SuggestionVoteRecord = {
+	suggestion: RecordIdString
+	type: SuggestionVoteTypeOptions
+	voter: RecordIdString
 }
 
 export type UserRecord = {
@@ -54,6 +74,8 @@ export type UserRecord = {
 // Response types include system fields and match responses from the PocketBase API
 export type MemberResponse<Texpand = unknown> = Required<MemberRecord> & BaseSystemFields<Texpand>
 export type SuggestionResponse<Texpand = unknown> = Required<SuggestionRecord> & BaseSystemFields<Texpand>
+export type SuggestionInfoResponse<Texpand = unknown> = Required<SuggestionInfoRecord> & BaseSystemFields<Texpand>
+export type SuggestionVoteResponse<Texpand = unknown> = Required<SuggestionVoteRecord> & BaseSystemFields<Texpand>
 export type UserResponse<Texpand = unknown> = Required<UserRecord> & AuthSystemFields<Texpand>
 
 // Types containing all Records and Responses, useful for creating typing helper functions
@@ -61,12 +83,16 @@ export type UserResponse<Texpand = unknown> = Required<UserRecord> & AuthSystemF
 export type CollectionRecords = {
 	member: MemberRecord
 	suggestion: SuggestionRecord
+	suggestionInfo: SuggestionInfoRecord
+	suggestionVote: SuggestionVoteRecord
 	user: UserRecord
 }
 
 export type CollectionResponses = {
 	member: MemberResponse
 	suggestion: SuggestionResponse
+	suggestionInfo: SuggestionInfoResponse
+	suggestionVote: SuggestionVoteResponse
 	user: UserResponse
 }
 
@@ -76,5 +102,7 @@ export type CollectionResponses = {
 export type TypedPocketBase = PocketBase & {
 	collection(idOrName: 'member'): RecordService<MemberResponse>
 	collection(idOrName: 'suggestion'): RecordService<SuggestionResponse>
+	collection(idOrName: 'suggestionInfo'): RecordService<SuggestionInfoResponse>
+	collection(idOrName: 'suggestionVote'): RecordService<SuggestionVoteResponse>
 	collection(idOrName: 'user'): RecordService<UserResponse>
 }

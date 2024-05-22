@@ -3,7 +3,7 @@ import { syncMember } from "../../lib/utils";
 import { pb } from "../../lib/pocketbase";
 import { CHECK } from "../../lib/emoji";
 import { command } from "jellycommands";
-import { createEmbed } from "./util";
+import { createEmbed } from "./utils";
 
 export default command({
 	name: "suggest",
@@ -21,7 +21,7 @@ export default command({
 			.addComponents(new ButtonBuilder().setCustomId("downvote").setEmoji("⬇️").setStyle(ButtonStyle.Secondary));
 
 		const message = await interaction.channel?.send({
-			embeds: [createEmbed({ content }, author)],
+			embeds: [createEmbed({ content, upvotes: 0, downvotes: 0 }, author)],
 			components: [row],
 		});
 
