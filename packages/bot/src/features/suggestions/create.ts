@@ -25,8 +25,8 @@ export default command({
 			components: [row],
 		});
 
-		await pb.collection("suggestion").create({ content, author: author.id, message: message!.id });
+		await pb.collection("suggestionInfo").create({ content, author: author.id, message: message!.id });
 
-		interaction.reply({ content: `${CHECK} Suggestion Created`, ephemeral: true });
+		interaction.reply({ content: `${CHECK} Suggestion created!`, ephemeral: true });
 	},
 });

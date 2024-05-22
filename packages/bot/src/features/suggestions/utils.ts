@@ -5,7 +5,8 @@ import { createProgress } from "./progress";
 import { pb } from "../../lib/pocketbase";
 
 export function createEmbed(suggestion: Omit<SuggestionRecord, "message" | "author">, author: MemberResponse) {
-	const ratio = suggestion.upvotes! / (suggestion.downvotes! + suggestion.upvotes!);
+	let ratio = suggestion.upvotes! / (suggestion.downvotes! + suggestion.upvotes!);
+	if (Number.isNaN(ratio)) ratio = 0.5;
 
 	return new EmbedBuilder()
 		.setColor(0xa6a6df)
