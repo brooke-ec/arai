@@ -6,14 +6,18 @@ export default button({
 	id: "upvote",
 
 	async run({ interaction }) {
-		await castVote(interaction, "upvote").catch((e) => {
-			interaction.reply({ content: `${CROSS} There was an error voting for this suggestion.`, ephemeral: true });
+		await castVote(interaction, "upvote").catch(async (e) => {
 			console.error(e);
+			await interaction.reply({
+				content: `${CROSS} There was an error voting for this suggestion.`,
+				ephemeral: true,
+			});
 		});
 
-		interaction.reply({
-			content: `${CHECK} Suggestion upvoted!`,
-			ephemeral: true,
-		});
+		if (!interaction.replied)
+			interaction.reply({
+				content: `${CHECK} Suggestion upvoted!`,
+				ephemeral: true,
+			});
 	},
 });
