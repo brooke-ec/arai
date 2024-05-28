@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { syncMember } from "../../lib/utils";
 import { pb } from "../../lib/pocketbase";
-import { CHECK } from "../../lib/emoji";
+import { CHECK, CROSS_BLUE, DOWNVOTE, UPVOTE } from "../../lib/emoji";
 import { command } from "jellycommands";
 import { createEmbed } from "./utils";
 
@@ -17,8 +17,9 @@ export default command({
 		const author = await syncMember(interaction.user);
 
 		const row = new ActionRowBuilder<ButtonBuilder>()
-			.addComponents(new ButtonBuilder().setCustomId("upvote").setEmoji("⬆️").setStyle(ButtonStyle.Secondary))
-			.addComponents(new ButtonBuilder().setCustomId("downvote").setEmoji("⬇️").setStyle(ButtonStyle.Secondary));
+			.addComponents(new ButtonBuilder().setCustomId("upvote").setEmoji(UPVOTE).setStyle(ButtonStyle.Secondary))
+			.addComponents(new ButtonBuilder().setCustomId("downvote").setEmoji(DOWNVOTE).setStyle(ButtonStyle.Secondary))
+			.addComponents(new ButtonBuilder().setCustomId("unvote").setEmoji(CROSS_BLUE).setStyle(ButtonStyle.Secondary));
 
 		const message = await interaction.channel?.send({
 			embeds: [createEmbed({ content, upvotes: 0, downvotes: 0 }, author)],

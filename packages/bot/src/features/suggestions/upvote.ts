@@ -1,4 +1,4 @@
-import { CHECK, CROSS } from "../../lib/emoji";
+import { CHECK, CROSS_RED } from "../../lib/emoji";
 import { button } from "jellycommands";
 import { castVote } from "./utils";
 
@@ -9,7 +9,7 @@ export default button({
 		await castVote(interaction, "upvote").catch(async (e) => {
 			console.error(e);
 			await interaction.reply({
-				content: `${CROSS} There was an error voting for this suggestion.`,
+				content: `${CROSS_RED} There was an error voting for this suggestion.`,
 				ephemeral: true,
 			});
 		});

@@ -10,7 +10,7 @@ export function createEmbed(suggestion: Omit<SuggestionRecord, "message" | "auth
 
 	return new EmbedBuilder()
 		.setColor(0xa6a6df)
-		.setTitle(`Suggestion #${1}`)
+		.setTitle(`Suggestion`)
 		.setAuthor({ name: author.name, iconURL: pb.files.getUrl(author, author.avatar) })
 		.setDescription(
 			`${suggestion.content}\n
