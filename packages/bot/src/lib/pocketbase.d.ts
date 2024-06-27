@@ -45,10 +45,8 @@ export type MemberRecord = {
 
 export type SuggestionRecord = {
 	author: RecordIdString
-	channel: string
 	content: string
 	downvotes?: number
-	message: string
 	upvotes?: number
 }
 
