@@ -1,6 +1,10 @@
 import "dotenv/config";
 import { JellyCommands } from "jellycommands";
 import { IntentsBitField } from "discord.js";
+import eventsource from "eventsource";
+
+// @ts-ignore
+globalThis.EventSource = eventsource;
 
 const client = new JellyCommands({
 	commands: "src/features",
