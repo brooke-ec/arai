@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-import { syncMember } from "../../lib/utils";
-import { pb } from "../../lib/pocketbase";
 import { CHECK, CROSS_BLUE, DOWNVOTE, UPVOTE } from "../../lib/emoji";
+import { getMember } from "../../lib/utils";
+import { pb } from "../../lib/pocketbase";
 import { command } from "jellycommands";
 import { createEmbed } from "./utils";
 
@@ -14,7 +14,7 @@ export default command({
 
 	run: async ({ interaction }) => {
 		const content = interaction.options.getString("content", true);
-		const author = await syncMember(interaction.user);
+		const author = await getMember(interaction.user);
 
 		const row = new ActionRowBuilder<ButtonBuilder>()
 			.addComponents(new ButtonBuilder().setCustomId("upvote").setEmoji(UPVOTE).setStyle(ButtonStyle.Secondary))
@@ -26,7 +26,9 @@ export default command({
 			components: [row],
 		});
 
-		await pb.collection("suggestionInfo").create({ content, author: author.id, message: message!.id });
+		await pb
+			.collection("suggestionInfo")
+			.create({ content, author: author.id, channel: message!.channelId, message: message!.id });
 
 		interaction.reply({ content: `${CHECK} Suggestion created!`, ephemeral: true });
 	},

@@ -4,7 +4,7 @@ import { pb } from "./pocketbase";
 import { User } from "discord.js";
 import { ofetch } from "ofetch";
 
-export async function syncMember(user: User): Promise<MemberResponse> {
+export async function getMember(user: User): Promise<MemberResponse> {
 	const old = await pb
 		.collection("member")
 		.getFirstListItem(pb.filter("snowflake={:id}", { id: user.id }))
@@ -27,6 +27,8 @@ export async function syncMember(user: User): Promise<MemberResponse> {
 	if (old) return await pb.collection("member").update(old.id, payload);
 	return await pb.collection("member").create(payload);
 }
+
+export const getMemberId = async (user: User) => (await getMember(user)).id;
 
 export async function upsert<T extends BaseSystemFields>(
 	collection: RecordService<T>,

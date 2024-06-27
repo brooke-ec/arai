@@ -1,10 +1,10 @@
 import type { MemberResponse, SuggestionRecord, SuggestionVoteTypeOptions } from "../../lib/pocketbase.d";
-import { ButtonInteraction, EmbedBuilder } from "discord.js";
-import { syncMember, upsert } from "../../lib/utils";
+import { ButtonInteraction, EmbedBuilder, Message } from "discord.js";
+import { getMemberId, upsert } from "../../lib/utils";
 import { createProgress } from "./progress";
 import { pb } from "../../lib/pocketbase";
 
-export function createEmbed(suggestion: Omit<SuggestionRecord, "message" | "author">, author: MemberResponse) {
+export function createEmbed(suggestion: Omit<SuggestionRecord, "channel" | "message" | "author">, author: MemberResponse) {
 	let ratio = suggestion.upvotes! / (suggestion.downvotes! + suggestion.upvotes!);
 	if (Number.isNaN(ratio)) ratio = 0.5;
 
@@ -19,15 +19,22 @@ ${createProgress(ratio, 13)}`,
 		);
 }
 
-export async function castVote(interaction: ButtonInteraction, type: keyof typeof SuggestionVoteTypeOptions) {
-	const c = pb.collection("suggestion");
+export async function getSuggestionId(c: string, m: string) {
+	const s = await pb.collection("suggestion").getFirstListItem(pb.filter("channel={:c}&&message={:m}", { c, m }));
+	return s.id;
+}
 
-	const suggestionId = (await c.getFirstListItem(pb.filter("message={:m}", { m: interaction.message.id }))).id;
-	const memberId = (await syncMember(interaction.user)).id;
+export async function updateMessage(suggestionId: string, message: Message) {
+	const suggestion = await pb.collection("suggestion").getOne(suggestionId, { expand: "author" });
+	const author = (suggestion.expand as { author: MemberResponse }).author;
+	await message.edit({ embeds: [createEmbed(suggestion, author)] });
+}
+
+export async function castVote(interaction: ButtonInteraction, type: keyof typeof SuggestionVoteTypeOptions) {
+	const suggestionId = await getSuggestionId(interaction.message.channelId, interaction.message.id);
+	const memberId = await getMemberId(interaction.user);
 
 	await upsert(pb.collection("suggestionVote"), { suggestion: suggestionId, voter: memberId, type });
 
-	const suggestion = await c.getOne(suggestionId, { expand: "author" });
-	const author = (suggestion.expand as { author: MemberResponse }).author;
-	await interaction.message.edit({ embeds: [createEmbed(suggestion, author)] });
+	await updateMessage(suggestionId, interaction.message);
 }
