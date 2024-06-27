@@ -1,16 +1,28 @@
-import type { MemberResponse, SuggestionRecord, SuggestionVoteTypeOptions } from "../../lib/pocketbase.d";
-import { ButtonInteraction, EmbedBuilder, Message } from "discord.js";
-import { getMemberId, upsert } from "../../lib/utils";
+import { ButtonInteraction, EmbedBuilder, Message, MessageContextMenuCommandInteraction } from "discord.js";
+import { getMemberId, toTitleCase, upsert } from "../../lib/utils";
 import { createProgress } from "./progress";
 import { pb } from "../../lib/pocketbase";
+import type {
+	MemberResponse,
+	SuggestionRecord,
+	SuggestionStateOptions,
+	SuggestionVoteTypeOptions,
+} from "../../lib/pocketbase.d";
+import { CHECK, CROSS_RED } from "../../lib/emoji";
+
+const COLORS: { [k in keyof typeof SuggestionStateOptions]: number } = {
+	approved: 0x2ecc71,
+	denied: 0xcc3b2e,
+	open: 0xa6a6df,
+};
 
 export function createEmbed(suggestion: Omit<SuggestionRecord, "author">, author: MemberResponse) {
 	let ratio = suggestion.upvotes! / (suggestion.downvotes! + suggestion.upvotes!);
 	if (Number.isNaN(ratio)) ratio = 0.5;
 
 	return new EmbedBuilder()
-		.setColor(0xa6a6df)
-		.setTitle(`Suggestion`)
+		.setColor(COLORS[suggestion.state])
+		.setTitle(`Suggestion ${toTitleCase(suggestion.state)}`)
 		.setAuthor({ name: author.name, iconURL: pb.files.getUrl(author, author.avatar) })
 		.setDescription(
 			`${suggestion.content}\n
@@ -37,4 +49,26 @@ export async function castVote(interaction: ButtonInteraction, type: keyof typeo
 	await upsert(pb.collection("suggestionVote"), { suggestion: suggestionId, voter: memberId, type });
 
 	await updateMessage(suggestionId, interaction.message);
+}
+
+export async function setState(
+	interaction: MessageContextMenuCommandInteraction,
+	state: keyof typeof SuggestionStateOptions,
+) {
+	const message = interaction.targetMessage;
+	const suggestionId = await getSuggestionId(message.channelId, message.id).catch(() => null);
+
+	if (suggestionId === null)
+		return await interaction.reply({
+			content: `${CROSS_RED} This message is not a suggestion.`,
+			ephemeral: true,
+		});
+
+	await pb.collection("suggestionInfo").update(suggestionId, { state: state });
+	await updateMessage(suggestionId, message);
+
+	interaction.reply({
+		content: `${CHECK} Suggestion ${state}!`,
+		ephemeral: true,
+	});
 }

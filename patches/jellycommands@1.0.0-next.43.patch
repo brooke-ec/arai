@@ -1,3 +1,44 @@
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index fd3bee7c1cdb4eeec0af0c1097cbe3c92e22c3e0..43ada00738b9fb963a45a518c50e14595aa27ae3 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -1,5 +1,5 @@
+ import * as discord_js from 'discord.js';
+-import { InteractionDeferReplyOptions, PermissionResolvable, BaseInteraction, ButtonInteraction, ClientEvents, ClientOptions, MessagePayload, InteractionReplyOptions, Client, BaseApplicationCommandOptionsData, ApplicationCommandOptionType, ChannelType, ApplicationCommandOptionChoiceData, ChatInputCommandInteraction, ApplicationCommandOption, AutocompleteInteraction, ContextMenuCommandInteraction } from 'discord.js';
++import { InteractionDeferReplyOptions, PermissionResolvable, BaseInteraction, ButtonInteraction, ClientEvents, ClientOptions, MessagePayload, InteractionReplyOptions, Client, BaseApplicationCommandOptionsData, ApplicationCommandOptionType, ChannelType, ApplicationCommandOptionChoiceData, ChatInputCommandInteraction, ApplicationCommandOption, AutocompleteInteraction, MessageContextMenuCommandInteraction, UserContextMenuCommandInteraction } from 'discord.js';
+ import { Locale, ApplicationCommandType, RESTPostAPIApplicationCommandsJSONBody, APIApplicationCommandOption } from 'discord-api-types/v10';
+ import Joi from 'joi';
+ import * as discord_api_types_utils_internals from 'discord-api-types/utils/internals';
+@@ -331,23 +331,23 @@ declare const command: (options: CommandOptions & {
+ interface MessageCommandOptions extends BaseOptions {
+ }
+ 
+-declare class MessageCommand extends BaseCommand<MessageCommandOptions, ContextMenuCommandInteraction> {
++declare class MessageCommand extends BaseCommand<MessageCommandOptions, MessageContextMenuCommandInteraction> {
+     readonly type = ApplicationCommandType.Message;
+-    constructor(run: CommandCallback<ContextMenuCommandInteraction>, options: MessageCommandOptions);
++    constructor(run: CommandCallback<MessageContextMenuCommandInteraction>, options: MessageCommandOptions);
+ }
+ declare const messageCommand: (options: MessageCommandOptions & {
+-    run: CommandCallback<ContextMenuCommandInteraction>;
++    run: CommandCallback<MessageContextMenuCommandInteraction>;
+ }) => MessageCommand;
+ 
+ interface UserCommandOptions extends BaseOptions {
+ }
+ 
+-declare class UserCommand extends BaseCommand<UserCommandOptions, ContextMenuCommandInteraction> {
++declare class UserCommand extends BaseCommand<UserCommandOptions, UserContextMenuCommandInteraction> {
+     readonly type = ApplicationCommandType.User;
+-    constructor(run: CommandCallback<ContextMenuCommandInteraction>, options: UserCommandOptions);
++    constructor(run: CommandCallback<UserContextMenuCommandInteraction>, options: UserCommandOptions);
+ }
+ declare const userCommand: (options: UserCommandOptions & {
+-    run: CommandCallback<ContextMenuCommandInteraction>;
++    run: CommandCallback<UserContextMenuCommandInteraction>;
+ }) => UserCommand;
+ 
+ export { Button, ButtonOptions, Command, CommandOptions, Event, EventOptions, JellyApplicationCommandOption, JellyCommands, JellyCommandsOptions, MessageCommand, MessageCommandOptions, UserCommand, UserCommandOptions, button, command, event, messageCommand, userCommand };
 diff --git a/dist/index.mjs b/dist/index.mjs
 index b9dd6322710dca6451a0b6e0cd4fd5eaf28e258c..6b999203ef8b6c2de2722615693924d3ca4da5a7 100644
 --- a/dist/index.mjs

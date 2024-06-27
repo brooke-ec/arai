@@ -1,5 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { CHECK, CROSS_BLUE, DOWNVOTE, UPVOTE } from "../../lib/emoji";
+import type { SuggestionStateOptions } from "../../lib/pocketbase.d";
 import { getMember } from "../../lib/utils";
 import { pb } from "../../lib/pocketbase";
 import { command } from "jellycommands";
@@ -22,13 +23,13 @@ export default command({
 			.addComponents(new ButtonBuilder().setCustomId("unvote").setEmoji(CROSS_BLUE).setStyle(ButtonStyle.Secondary));
 
 		const message = await interaction.channel?.send({
-			embeds: [createEmbed({ content, upvotes: 0, downvotes: 0 }, author)],
+			embeds: [createEmbed({ content, upvotes: 0, downvotes: 0, state: "open" as SuggestionStateOptions }, author)],
 			components: [row],
 		});
 
 		await pb
 			.collection("suggestionInfo")
-			.create({ content, author: author.id, channel: message!.channelId, message: message!.id });
+			.create({ content, author: author.id, channel: message!.channelId, message: message!.id, state: "open" });
 
 		interaction.reply({ content: `${CHECK} Suggestion created!`, ephemeral: true });
 	},

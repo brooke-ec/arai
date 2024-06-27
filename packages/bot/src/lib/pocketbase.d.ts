@@ -43,18 +43,30 @@ export type MemberRecord = {
 	snowflake: string
 }
 
+export enum SuggestionStateOptions {
+	"open" = "open",
+	"approved" = "approved",
+	"denied" = "denied",
+}
 export type SuggestionRecord = {
 	author: RecordIdString
 	content: string
 	downvotes?: number
+	state: SuggestionStateOptions
 	upvotes?: number
 }
 
+export enum SuggestionInfoStateOptions {
+	"open" = "open",
+	"approved" = "approved",
+	"denied" = "denied",
+}
 export type SuggestionInfoRecord = {
 	author: RecordIdString
 	channel: string
 	content: string
 	message: string
+	state: SuggestionInfoStateOptions
 }
 
 export enum SuggestionVoteTypeOptions {

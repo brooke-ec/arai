@@ -2,8 +2,8 @@ import { messageCommand } from "jellycommands";
 import { setState } from "./utils";
 
 export default messageCommand({
-	name: "🟢 Approve Suggestion",
+	name: "🔴 Deny Suggestion",
 	global: true,
 
-	run: ({ interaction }) => setState(interaction, "approved"),
+	run: ({ interaction }) => setState(interaction, "denied"),
 });

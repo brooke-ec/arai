@@ -49,3 +49,6 @@ export async function upsert<T extends BaseSystemFields>(
 		return await collection.update(existing.id, data);
 	});
 }
+
+export const toTitleCase = (value: string) =>
+	value.replace(/\w\S*/g, (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase());
