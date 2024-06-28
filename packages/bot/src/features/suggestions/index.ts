@@ -5,7 +5,7 @@ import { STATE_COLOR } from "./state/index";
 import { createProgress } from "./progress";
 import { pb } from "../../lib/pocketbase";
 
-export function createEmbed(suggestion: Omit<SuggestionRecord, "author">, author: MemberResponse) {
+export function createEmbed(suggestion: Omit<SuggestionRecord, "author" | "thread">, author: MemberResponse) {
 	let ratio = suggestion.upvotes! / (suggestion.downvotes! + suggestion.upvotes!);
 	if (Number.isNaN(ratio)) ratio = 0.5;
 
@@ -20,8 +20,11 @@ ${createProgress(ratio, 13)}`,
 		);
 }
 
+export const getSuggestion = (c: string, m: string) =>
+	pb.collection("suggestionInfo").getFirstListItem(pb.filter("channel={:c}&&message={:m}", { c, m }));
+
 export async function getSuggestionId(c: string, m: string) {
-	const s = await pb.collection("suggestionInfo").getFirstListItem(pb.filter("channel={:c}&&message={:m}", { c, m }));
+	const s = await getSuggestion(c, m);
 	return s.id;
 }
 

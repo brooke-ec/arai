@@ -1,8 +1,8 @@
+import { EmbedBuilder, MessageContextMenuCommandInteraction, ThreadChannel } from "discord.js";
 import type { SuggestionStateOptions } from "../../../lib/pocketbase.d";
-import { MessageContextMenuCommandInteraction } from "discord.js";
-import { getSuggestionId, updateMessage } from "../index";
+import { getSuggestion, updateMessage } from "../index";
+import { abort, toTitleCase } from "../../../lib/utils";
 import { pb } from "../../../lib/pocketbase";
-import { abort } from "../../../lib/utils";
 
 export const STATE_COLOR: { [k in keyof typeof SuggestionStateOptions]: number } = {
 	approved: 0x2ecc71,
@@ -15,12 +15,17 @@ export async function setState(
 	state: keyof typeof SuggestionStateOptions,
 ) {
 	const message = interaction.targetMessage;
-	const suggestionId = await getSuggestionId(message.channelId, message.id).catch(() => null);
+	const suggestion = await getSuggestion(message.channelId, message.id).catch(() => null);
 
-	if (suggestionId === null) abort("This message is not a suggestion.");
+	if (suggestion === null) abort("This message is not a suggestion.");
 
-	await pb.collection("suggestionInfo").update(suggestionId, { state: state });
-	await updateMessage(suggestionId, message);
+	await pb.collection("suggestionInfo").update(suggestion.id, { state: state });
+	await updateMessage(suggestion.id, message);
+
+	const thread = (await interaction.client.channels.fetch(suggestion.thread)) as ThreadChannel;
+	thread.send({
+		embeds: [new EmbedBuilder().setColor(STATE_COLOR[state]).setTitle(`Suggestion ${toTitleCase(state)}`)],
+	});
 
 	return `Suggestion ${state}!`;
 }

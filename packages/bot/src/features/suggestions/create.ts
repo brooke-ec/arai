@@ -27,9 +27,16 @@ export default command({
 			components: [row],
 		});
 
-		await pb
-			.collection("suggestionInfo")
-			.create({ content, author: author.id, channel: message!.channelId, message: message!.id, state: "open" });
+		const thread = await message!.startThread({ name: content });
+
+		await pb.collection("suggestionInfo").create({
+			channel: message!.channelId,
+			message: message!.id,
+			author: author.id,
+			thread: thread.id,
+			state: "open",
+			content,
+		});
 
 		return "Suggestion created!";
 	}),
