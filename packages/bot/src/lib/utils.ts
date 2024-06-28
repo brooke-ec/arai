@@ -1,8 +1,45 @@
-import { BaseSystemFields, MemberResponse } from "./pocketbase.d";
-import { ClientResponseError, RecordService } from "pocketbase";
+import { ButtonInteraction, CommandInteraction, User } from "discord.js";
+import { ClientResponseError } from "pocketbase";
+import { MemberResponse } from "./pocketbase.d";
+import { CHECK, CROSS_RED } from "./emoji";
 import { pb } from "./pocketbase";
-import { User } from "discord.js";
 import { ofetch } from "ofetch";
+
+class ExitMessage {
+	content: string;
+
+	constructor(content: string) {
+		this.content = content;
+	}
+}
+
+export function wrap<F extends (...args: any[]) => Promise<any>>(fn: F): F {
+	type Interaction = CommandInteraction | ButtonInteraction;
+
+	// @ts-ignore
+	return async (options: { interaction: Interaction }, ...args: any) => {
+		let message: ExitMessage | null = null;
+
+		try {
+			const result = await fn(options, ...args);
+			if (typeof result == "string") message = new ExitMessage(`${CHECK} ${result}`);
+		} catch (e) {
+			if (e instanceof ExitMessage) message = e;
+			else {
+				message = new ExitMessage(`${CROSS_RED} Unexpected Error`);
+				console.error(e);
+			}
+		}
+
+		if (message && !options.interaction.replied)
+			await options.interaction.reply({ content: message.content, ephemeral: true });
+	};
+}
+
+export function abort(message: string, icon: string | null = CROSS_RED): never {
+	if (icon) message = icon + " " + message;
+	throw new ExitMessage(message);
+}
 
 export async function getMember(user: User): Promise<MemberResponse> {
 	const old = await pb
@@ -29,26 +66,6 @@ export async function getMember(user: User): Promise<MemberResponse> {
 }
 
 export const getMemberId = async (user: User) => (await getMember(user)).id;
-
-export async function upsert<T extends BaseSystemFields>(
-	collection: RecordService<T>,
-	data: { [key: string]: any },
-): Promise<T> {
-	return await collection.create(data).catch(async (e: ClientResponseError) => {
-		if (e.status != 400) throw e;
-
-		const filter: string[] = [];
-		const params: { [key: string]: any } = {};
-		for (const [field, error] of Object.entries(e.response.data) as [string, { code: string }][]) {
-			if (error.code != "validation_not_unique") throw e;
-			filter.push(`${field}={:${field}}`);
-			params[field] = data[field];
-		}
-
-		const existing = await collection.getFirstListItem(pb.filter(filter.join("&&"), params));
-		return await collection.update(existing.id, data);
-	});
-}
 
 export const toTitleCase = (value: string) =>
 	value.replace(/\w\S*/g, (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase());

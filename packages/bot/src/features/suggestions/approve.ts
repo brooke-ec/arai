@@ -1,9 +1,0 @@
-import { messageCommand } from "jellycommands";
-import { setState } from "./utils";
-
-export default messageCommand({
-	name: "🟢 Approve Suggestion",
-	global: true,
-
-	run: ({ interaction }) => setState(interaction, "approved"),
-});

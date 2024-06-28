@@ -1,10 +1,10 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-import { CHECK, CROSS_BLUE, DOWNVOTE, UPVOTE } from "../../lib/emoji";
 import type { SuggestionStateOptions } from "../../lib/pocketbase.d";
-import { getMember } from "../../lib/utils";
+import { CROSS_BLUE, DOWNVOTE, UPVOTE } from "../../lib/emoji";
+import { getMember, wrap } from "../../lib/utils";
 import { pb } from "../../lib/pocketbase";
 import { command } from "jellycommands";
-import { createEmbed } from "./utils";
+import { createEmbed } from "./index";
 
 export default command({
 	name: "suggest",
@@ -13,7 +13,7 @@ export default command({
 
 	global: true,
 
-	run: async ({ interaction }) => {
+	run: wrap(async ({ interaction }) => {
 		const content = interaction.options.getString("content", true);
 		const author = await getMember(interaction.user);
 
@@ -31,6 +31,6 @@ export default command({
 			.collection("suggestionInfo")
 			.create({ content, author: author.id, channel: message!.channelId, message: message!.id, state: "open" });
 
-		interaction.reply({ content: `${CHECK} Suggestion created!`, ephemeral: true });
-	},
+		return "Suggestion created!";
+	}),
 });
