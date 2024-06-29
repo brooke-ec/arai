@@ -1,5 +1,5 @@
 import { messageCommand } from "jellycommands";
-import { wrap } from "../../../lib/utils";
+import { wrap } from "../../lib/utils";
 import { setState } from "./index";
 
 export default messageCommand({

@@ -53,7 +53,6 @@ export type SuggestionRecord = {
 	content: string
 	downvotes?: number
 	state: SuggestionStateOptions
-	thread: string
 	upvotes?: number
 }
 
@@ -64,11 +63,8 @@ export enum SuggestionInfoStateOptions {
 }
 export type SuggestionInfoRecord = {
 	author: RecordIdString
-	channel: string
 	content: string
-	message: string
 	state: SuggestionInfoStateOptions
-	thread: string
 }
 
 export enum SuggestionVoteTypeOptions {

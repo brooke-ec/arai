@@ -1,13 +1,13 @@
-import { abort, getMemberId, wrap } from "../../../lib/utils";
-import { getSuggestionId, updateMessage } from "../index";
-import { pb } from "../../../lib/pocketbase";
+import { abort, getMemberId, wrap } from "../../lib/utils";
+import { getSuggestionId, updateMessage } from "./index";
+import { pb } from "../../lib/pocketbase";
 import { button } from "jellycommands";
 
 export default button({
-	id: "unvote",
+	id: /suggestion-.{15}-unvote/i,
 
 	run: wrap(async ({ interaction }) => {
-		const suggestionId = await getSuggestionId(interaction.message.channelId, interaction.message.id);
+		const suggestionId = getSuggestionId(interaction.message);
 		const memberId = await getMemberId(interaction.user);
 		const c = pb.collection("suggestionVote");
 
@@ -17,7 +17,7 @@ export default button({
 		if (vote === null) abort("You have not voted for this suggestion.");
 
 		await c.delete(vote.id);
-		await updateMessage(suggestionId, interaction.message);
+		await updateMessage(interaction.message);
 
 		return "Vote removed!";
 	}),
