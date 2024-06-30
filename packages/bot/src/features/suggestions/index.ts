@@ -35,11 +35,12 @@ export async function setState(
 }
 
 export async function castVote(interaction: ButtonInteraction, type: keyof typeof SuggestionVoteTypeOptions) {
-	const suggestionId = getSuggestionId(interaction.message);
+	const suggestion = await fetchSuggestion(interaction.message);
+	if (suggestion.state != SuggestionStateOptions.open) abort("This suggestion is has been closed");
 
 	const memberId = await getMemberId(interaction.user);
 
-	await upsert(pb.collection("suggestionVote"), { suggestion: suggestionId, voter: memberId, type });
+	await upsert(pb.collection("suggestionVote"), { suggestion: suggestion.id, voter: memberId, type });
 	await updateMessage(interaction.message);
 }
 
@@ -65,6 +66,8 @@ export const getSuggestionId = (message: Message) => {
 		return null;
 	}
 };
+
+export const fetchSuggestion = (message: Message) => pb.collection("suggestion").getOne(getSuggestionId(message)!);
 
 export async function updateMessage(message: Message) {
 	const suggestion = await pb.collection("suggestion").getOne(getSuggestionId(message)!, { expand: "author" });
