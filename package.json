@@ -8,7 +8,7 @@
 	},
 	"pnpm": {
 		"patchedDependencies": {
-			"jellycommands@1.0.0-next.43": "patches/jellycommands@1.0.0-next.43.patch"
+			"jellycommands@1.0.0-next.43": "packages/bot/patches/jellycommands@1.0.0-next.43.patch"
 		}
 	}
 }

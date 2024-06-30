@@ -22,5 +22,10 @@
 		"pocketbase": "^0.21.3",
 		"pocketbase-typegen": "^1.2.1",
 		"tsm": "^2.3.0"
+	},
+	"pnpm": {
+		"patchedDependencies": {
+			"jellycommands@1.0.0-next.43": "patches/jellycommands@1.0.0-next.43.patch"
+		}
 	}
 }

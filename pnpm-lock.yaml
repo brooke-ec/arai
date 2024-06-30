@@ -7,7 +7,7 @@ settings:
 patchedDependencies:
   jellycommands@1.0.0-next.43:
     hash: ip7dcyuw526mw4dckonvnkncxq
-    path: patches/jellycommands@1.0.0-next.43.patch
+    path: packages/bot/patches/jellycommands@1.0.0-next.43.patch
 
 importers:
 
