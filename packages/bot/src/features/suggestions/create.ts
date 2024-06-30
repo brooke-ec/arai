@@ -11,7 +11,7 @@ export default command({
 	description: "Create a new suggestion",
 	options: [{ name: "content", type: "String", description: "The content of the suggestion.", required: true }],
 
-	global: true,
+	guilds: [process.env.GUILD_ID!],
 
 	run: wrap(async ({ interaction }) => {
 		const content = interaction.options.getString("content", true);

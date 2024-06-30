@@ -4,7 +4,9 @@ import { setState } from "./index";
 
 export default messageCommand({
 	name: "🔴 Deny Suggestion",
-	global: true,
+	guards: { permissions: ["ManageMessages"] },
+
+	guilds: [process.env.GUILD_ID!],
 
 	run: wrap(({ interaction }) => setState(interaction, "denied")),
 });
