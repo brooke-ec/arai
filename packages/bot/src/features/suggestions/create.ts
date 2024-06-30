@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-import type { SuggestionStateOptions } from "../../lib/pocketbase.d";
+import type { SuggestionStateOptions } from "../../lib/pocketbase-types";
 import { CROSS_BLUE, DOWNVOTE, UPVOTE } from "../../lib/emoji";
 import { getMember, wrap } from "../../lib/utils";
 import { pb } from "../../lib/pocketbase";

@@ -8,6 +8,7 @@ export default button({
 
 	run: wrap(async ({ interaction }) => {
 		const suggestionId = getSuggestionId(interaction.message);
+
 		const memberId = await getMemberId(interaction.user);
 		const c = pb.collection("suggestionVote");
 

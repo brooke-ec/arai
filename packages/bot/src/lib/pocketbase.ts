@@ -1,5 +1,5 @@
 import PocketBase, { ClientResponseError, RecordService } from "pocketbase";
-import type { BaseSystemFields, TypedPocketBase } from "./pocketbase.d";
+import type { BaseSystemFields, TypedPocketBase } from "./pocketbase-types";
 
 export const pb: TypedPocketBase = new PocketBase(process.env.PB_TYPEGEN_URL);
 pb.admins.authWithPassword(process.env.PB_TYPEGEN_EMAIL!, process.env.PB_TYPEGEN_PASSWORD!);

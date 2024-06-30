@@ -1,6 +1,6 @@
 import { ButtonInteraction, CommandInteraction, User } from "discord.js";
 import { ClientResponseError } from "pocketbase";
-import { MemberResponse } from "./pocketbase.d";
+import { MemberResponse } from "./pocketbase-types";
 import { CHECK, CROSS_RED } from "./emoji";
 import { pb } from "./pocketbase";
 import { ofetch } from "ofetch";

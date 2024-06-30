@@ -2,12 +2,12 @@ import { ButtonInteraction, EmbedBuilder, Message, MessageContextMenuCommandInte
 import { abort, getMemberId, toTitleCase } from "../../lib/utils";
 import { pb, upsert } from "../../lib/pocketbase";
 import { createProgress } from "./progress";
-import type {
+import {
 	MemberResponse,
 	SuggestionRecord,
 	SuggestionStateOptions,
 	SuggestionVoteTypeOptions,
-} from "../../lib/pocketbase.d";
+} from "../../lib/pocketbase-types";
 
 export const STATE_COLOR: { [k in keyof typeof SuggestionStateOptions]: number } = {
 	approved: 0x2ecc71,
@@ -21,8 +21,7 @@ export async function setState(
 ) {
 	const message = interaction.targetMessage;
 	const suggestionId = getSuggestionId(message);
-
-	if (suggestionId === null) abort("This message is not a suggestion.");
+	if (suggestionId === null) abort("This message is not a suggestion");
 
 	await pb.collection("suggestionInfo").update(suggestionId, { state: state });
 	await updateMessage(message);
@@ -37,6 +36,7 @@ export async function setState(
 
 export async function castVote(interaction: ButtonInteraction, type: keyof typeof SuggestionVoteTypeOptions) {
 	const suggestionId = getSuggestionId(interaction.message);
+
 	const memberId = await getMemberId(interaction.user);
 
 	await upsert(pb.collection("suggestionVote"), { suggestion: suggestionId, voter: memberId, type });
