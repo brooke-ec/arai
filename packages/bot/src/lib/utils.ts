@@ -1,4 +1,4 @@
-import { ButtonInteraction, CommandInteraction, User } from "discord.js";
+import { ButtonInteraction, CommandInteraction, GuildMemberRoleManager, User } from "discord.js";
 import { ClientResponseError } from "pocketbase";
 import { MemberResponse } from "./pocketbase-types";
 import { CHECK, CROSS_RED } from "./emoji";
@@ -69,3 +69,8 @@ export const getMemberId = async (user: User) => (await getMember(user)).id;
 
 export const toTitleCase = (value: string) =>
 	value.replace(/\w\S*/g, (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase());
+
+export function hasRole(role: string, roles: string[] | GuildMemberRoleManager): boolean {
+	if (roles instanceof GuildMemberRoleManager) roles = Array.from(roles.cache.keys());
+	return roles.some((r) => r == role);
+}

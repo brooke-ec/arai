@@ -1,4 +1,4 @@
-import { abort, getMemberId, toTitleCase } from "../../lib/utils";
+import { abort, getMemberId, hasRole, toTitleCase } from "../../lib/utils";
 import { pb, upsert } from "../../lib/pocketbase";
 import { createProgress } from "./progress";
 import {
@@ -16,6 +16,8 @@ import {
 	SuggestionStateOptions,
 	SuggestionVoteTypeOptions,
 } from "../../lib/pocketbase-types";
+
+const BLACKLIST = process.env.SUGGESTION_ROLE_BLACKLIST?.split(",") ?? [];
 
 export const STATE_COLOR: { [k in keyof typeof SuggestionStateOptions]: number } = {
 	approved: 0x2ecc71,
@@ -55,6 +57,8 @@ export async function setState(
 }
 
 export async function castVote(interaction: ButtonInteraction, type: keyof typeof SuggestionVoteTypeOptions) {
+	if (BLACKLIST.some((r) => hasRole(r, interaction.member!.roles))) abort("You are not permitted to vote on suggestions");
+
 	const suggestion = await fetchSuggestion(interaction.message);
 	if (suggestion.state != SuggestionStateOptions.open) abort("This suggestion is has been closed");
 
