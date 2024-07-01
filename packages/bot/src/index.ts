@@ -12,7 +12,7 @@ const client = new JellyCommands({
 	buttons: "src/features",
 
 	clientOptions: {
-		intents: [IntentsBitField.Flags.Guilds],
+		intents: [IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMessages],
 	},
 
 	dev: {
