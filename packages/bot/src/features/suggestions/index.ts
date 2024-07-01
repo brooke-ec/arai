@@ -1,7 +1,15 @@
-import { ButtonInteraction, EmbedBuilder, Message, MessageContextMenuCommandInteraction } from "discord.js";
 import { abort, getMemberId, toTitleCase } from "../../lib/utils";
 import { pb, upsert } from "../../lib/pocketbase";
 import { createProgress } from "./progress";
+import {
+	Message,
+	ButtonStyle,
+	EmbedBuilder,
+	ButtonBuilder,
+	ActionRowBuilder,
+	ButtonInteraction,
+	MessageContextMenuCommandInteraction,
+} from "discord.js";
 import {
 	MemberResponse,
 	SuggestionRecord,
@@ -13,6 +21,18 @@ export const STATE_COLOR: { [k in keyof typeof SuggestionStateOptions]: number }
 	approved: 0x2ecc71,
 	denied: 0xcc3b2e,
 	open: 0xa6a6df,
+};
+
+export const CREATOR = {
+	content: "­",
+	components: [
+		new ActionRowBuilder<ButtonBuilder>().addComponents(
+			new ButtonBuilder()
+				.setCustomId("suggestion-create")
+				.setStyle(ButtonStyle.Secondary)
+				.setLabel("✨ Create Suggestion ✨"),
+		),
+	],
 };
 
 export async function setState(
