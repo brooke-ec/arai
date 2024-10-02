@@ -42,7 +42,7 @@ export async function setState(
 	state: keyof typeof SuggestionStateOptions,
 ) {
 	const message = interaction.targetMessage;
-	const suggestionId = getSuggestionId(message);
+	const suggestionId = await getSuggestionId(message, false);
 	if (suggestionId === null) abort("This message is not a suggestion");
 
 	await pb.collection("suggestionInfo").update(suggestionId, { state: state });
@@ -83,13 +83,17 @@ ${createProgress(ratio, 13)}`,
 		);
 }
 
-export const getSuggestionId = (message: Message) => {
+export function getSuggestionId(message: Message, strict?: true): string | null;
+export function getSuggestionId(message: Message, strict: false): Promise<string | null>;
+export function getSuggestionId(message: Message, strict: boolean = true): string | null | Promise<string | null> {
 	try {
 		return message.components[0].components[0].customId!.match(/suggestion-(.{15})-.+/i)![1];
 	} catch {
+		if (!strict && message.channel.isThread())
+			return message.channel.fetchStarterMessage().then((m) => m && getSuggestionId(m));
 		return null;
 	}
-};
+}
 
 export const fetchSuggestion = (message: Message) => pb.collection("suggestion").getOne(getSuggestionId(message)!);
 
